@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title">
+  <title id="title">Peniel Baptist Church</title>
+  <rect width="800" height="600" fill="#ffffff"/>
+  <g fill="none" stroke="#0b3d78" stroke-width="6" stroke-linecap="round">
+    <path d="M295 208c24-54 66-88 105-101"/>
+    <path d="M505 208c-24-54-66-88-105-101"/>
+    <path d="M300 208c43-68 100-80 200 0"/>
+    <path d="M330 195c6-36 20-72 44-100"/>
+    <path d="M470 195c-6-36-20-72-44-100"/>
+    <path d="M330 154c44-18 96-18 140 0"/>
+    <path d="M325 186c50-20 100-20 150 0"/>
+  </g>
+  <path fill="#0b3d78" d="M368 82h64v218l-32 42-32-42z"/>
+  <path fill="#0b3d78" d="M323 112h154v38H323z"/>
+  <path fill="#0b3d78" d="M222 268l60-80c60 16 105 50 118 65v80c-53 43-97 67-129 110 9-46-16-87-49-175z"/>
+  <path fill="#0b3d78" d="M578 268l-60-80c-60 16-105 50-118 65v80c53 43 97 67 129 110-9-46 16-87 49-175z"/>
+  <path fill="#0b3d78" d="M185 248l-64 82c68 45 143 39 190 72-31-54-88-89-126-154z"/>
+  <path fill="#0b3d78" d="M615 248l64 82c-68 45-143 39-190 72 31-54 88-89 126-154z"/>
+  <path fill="#0b3d78" d="M95 337c38 120 177 99 279 135-37-60-124-82-205-117 29 2 54 3 80-2-67-8-118-30-154-16z"/>
+  <path fill="#0b3d78" d="M705 337c-38 120-177 99-279 135 37-60 124-82 205-117-29 2-54 3-80-2 67-8 118-30 154-16z"/>
+  <path fill="#ef2726" d="M411 472c41-23 54-80 12-132 4 30-14 48-30 65-20 22-21 47 10 67-8-27-23-42 2-70-7 35 36 34 6 70z"/>
+  <path fill="#ef2726" d="M368 408c-23 26-27 59 6 76 22 11 33-11 18-29-13-15-25-31-24-47z"/>
+  <text x="400" y="548" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="64" letter-spacing="6" fill="#0b3d78">PENIEL BAPTIST</text>
+  <text x="400" y="594" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="38" letter-spacing="14" fill="#ef2726">CHURCH</text>
+</svg>

@@ -1,6 +1,9 @@
 import { Resend } from "resend";
+import { readFileSync } from "node:fs";
 
 const PLANNING_CENTER_PEOPLE_URL = "https://api.planningcenteronline.com/people/v2/people";
+const LOGO_CONTENT_ID = "pbc-logo";
+const LOGO_PATH = new URL("../assets/pbc-logo.svg", import.meta.url);
 
 const env = {
   planningCenterClientId: process.env.PC_CLIENTID,
@@ -200,6 +203,7 @@ async function sendCelebrationEmail(resend, celebration) {
     subject,
     html,
     text,
+    attachments: [logoAttachment()],
   });
 
   if (error) {
@@ -210,11 +214,12 @@ async function sendCelebrationEmail(resend, celebration) {
 }
 
 function birthdayHtml(person) {
-  return `
-    <p>Hi ${escapeHtml(person.firstName)},</p>
-    <p>Happy birthday from your PBC family. We are grateful for you and pray this year is filled with God's grace, peace, and joy.</p>
-    <p>With love,<br>PBC</p>
-  `.trim();
+  return emailLayout({
+    greeting: `Hi ${escapeHtml(person.firstName)},`,
+    body: "Happy birthday from your PBC family. We are grateful for you and pray this year is filled with God's grace, peace, and joy.",
+    verse: '"This is the day which the LORD hath made; we will rejoice and be glad in it."',
+    reference: "Psalm 118:24",
+  });
 }
 
 function birthdayText(person) {
@@ -223,17 +228,21 @@ function birthdayText(person) {
     "",
     "Happy birthday from your PBC family. We are grateful for you and pray this year is filled with God's grace, peace, and joy.",
     "",
+    '"This is the day which the LORD hath made; we will rejoice and be glad in it."',
+    "Psalm 118:24",
+    "",
     "With love,",
     "PBC",
   ].join("\n");
 }
 
 function anniversaryHtml(person) {
-  return `
-    <p>Hi ${escapeHtml(person.firstName)},</p>
-    <p>Happy anniversary from your PBC family. We are grateful for your marriage and pray God's continued blessing over the year ahead.</p>
-    <p>With love,<br>PBC</p>
-  `.trim();
+  return emailLayout({
+    greeting: `Hi ${escapeHtml(person.firstName)},`,
+    body: "Happy anniversary from your PBC family. We are grateful for your marriage and pray God's continued blessing over the year ahead.",
+    verse: '"What therefore God hath joined together, let not man put asunder."',
+    reference: "Mark 10:9",
+  });
 }
 
 function anniversaryText(person) {
@@ -242,9 +251,50 @@ function anniversaryText(person) {
     "",
     "Happy anniversary from your PBC family. We are grateful for your marriage and pray God's continued blessing over the year ahead.",
     "",
+    '"What therefore God hath joined together, let not man put asunder."',
+    "Mark 10:9",
+    "",
     "With love,",
     "PBC",
   ].join("\n");
+}
+
+function emailLayout({ greeting, body, verse, reference }) {
+  return `
+    <div style="margin:0;padding:0;background:#ffffff;color:#1f2937;font-family:Arial,Helvetica,sans-serif;line-height:1.6;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;background:#ffffff;">
+        <tr>
+          <td align="center" style="padding:32px 16px;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;max-width:560px;">
+              <tr>
+                <td align="center" style="padding:0 0 24px;">
+                  <img src="cid:${LOGO_CONTENT_ID}" width="220" alt="Peniel Baptist Church" style="display:block;width:220px;max-width:80%;height:auto;border:0;outline:none;text-decoration:none;">
+                </td>
+              </tr>
+              <tr>
+                <td style="font-size:16px;color:#1f2937;">
+                  <p style="margin:0 0 16px;">${greeting}</p>
+                  <p style="margin:0 0 20px;">${escapeHtml(body)}</p>
+                  <p style="margin:0 0 4px;color:#0b3d78;font-style:italic;">${escapeHtml(verse)}</p>
+                  <p style="margin:0 0 24px;color:#0b3d78;font-weight:bold;">${escapeHtml(reference)}</p>
+                  <p style="margin:0;">With love,<br>PBC</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>
+  `.trim();
+}
+
+function logoAttachment() {
+  return {
+    filename: "pbc-logo.svg",
+    content: readFileSync(LOGO_PATH),
+    contentType: "image/svg+xml",
+    inlineContentId: LOGO_CONTENT_ID,
+  };
 }
 
 function getToday(timezone) {
