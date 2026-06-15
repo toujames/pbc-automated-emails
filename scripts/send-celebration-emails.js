@@ -12,6 +12,7 @@ const env = {
   from: process.env.EMAIL_FROM,
   replyTo: process.env.EMAIL_REPLY_TO,
   testEmail: process.env.TEST_EMAIL,
+  previewEvent: process.env.PREVIEW_EVENT || "none",
   dryRun: isTruthy(process.env.DRY_RUN),
   sendEvents: new Set((process.env.SEND_EVENTS || "birthday,anniversary").split(",").map((event) => event.trim())),
   timezone: process.env.TIME_ZONE || "America/Chicago",
@@ -24,6 +25,11 @@ main().catch((error) => {
 
 async function main() {
   validateConfig();
+
+  if (env.previewEvent !== "none") {
+    await sendPreviewEmail();
+    return;
+  }
 
   const today = getToday(env.timezone);
   const people = await fetchPeople();
@@ -48,14 +54,36 @@ async function main() {
 function validateConfig() {
   const missing = [];
 
-  if (!env.planningCenterClientId) missing.push("PC_CLIENTID");
-  if (!env.planningCenterSecret) missing.push("PC_SECRET");
+  if (env.previewEvent !== "none" && !["birthday", "anniversary"].includes(env.previewEvent)) {
+    throw new Error("PREVIEW_EVENT must be one of: none, birthday, anniversary");
+  }
+
+  if (env.previewEvent === "none") {
+    if (!env.planningCenterClientId) missing.push("PC_CLIENTID");
+    if (!env.planningCenterSecret) missing.push("PC_SECRET");
+  }
+
   if (!env.dryRun && !env.resendApiKey) missing.push("RESEND_API");
   if (!env.dryRun && !env.from) missing.push("EMAIL_FROM");
+  if (env.previewEvent !== "none" && !env.testEmail) missing.push("TEST_EMAIL");
 
   if (missing.length > 0) {
     throw new Error(`Missing required environment variable(s): ${missing.join(", ")}`);
   }
+}
+
+async function sendPreviewEmail() {
+  const resend = env.dryRun ? null : new Resend(env.resendApiKey);
+  const person = {
+    firstName: "James",
+    fullName: "James Touthang",
+    email: env.testEmail,
+  };
+
+  await sendCelebrationEmail(resend, {
+    type: env.previewEvent,
+    person,
+  });
 }
 
 async function fetchPeople() {

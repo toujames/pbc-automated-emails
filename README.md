@@ -36,6 +36,11 @@ The workflow runs every day at `14:00 UTC`, which is `9:00 AM America/Chicago` d
 
 From GitHub Actions, run the `Celebration Emails` workflow manually with `dry_run` set to `true`. A dry run fetches Planning Center data and logs who would receive an email, but does not send anything.
 
+To send a sample template to `james@touthang.info` without needing a real birthday or anniversary today, run the workflow manually with:
+
+- `dry_run`: `false`
+- `preview_event`: `birthday` or `anniversary`
+
 To test locally:
 
 ```bash
@@ -66,6 +71,7 @@ Examples:
 ```bash
 SEND_EVENTS=birthday DRY_RUN=true npm run send
 SEND_EVENTS=anniversary TEST_EMAIL=office@pbctulsa.org npm run send
+PREVIEW_EVENT=birthday TEST_EMAIL=james@touthang.info RESEND_API=... EMAIL_FROM="PBC <info@pbctulsa.org>" npm run send
 ```
 
 ## Edit Email Copy

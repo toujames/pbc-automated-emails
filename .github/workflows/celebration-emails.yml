@@ -11,6 +11,15 @@ on:
         options:
           - "true"
           - "false"
+      preview_event:
+        description: "Send a sample template to the test email"
+        required: true
+        default: "none"
+        type: choice
+        options:
+          - "none"
+          - "birthday"
+          - "anniversary"
   schedule:
     - cron: "0 14 * * *"
 
@@ -24,6 +33,7 @@ jobs:
       EMAIL_FROM: "PBC <info@pbctulsa.org>"
       EMAIL_REPLY_TO: ${{ vars.EMAIL_REPLY_TO }}
       TEST_EMAIL: ${{ github.event_name == 'workflow_dispatch' && 'james@touthang.info' || '' }}
+      PREVIEW_EVENT: ${{ github.event_name == 'workflow_dispatch' && inputs.preview_event || 'none' }}
       TIME_ZONE: America/Chicago
       DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
     steps:
