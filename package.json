@@ -1,0 +1,12 @@
+{
+  "name": "pbc-automated-emails",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "check": "node --check scripts/send-celebration-emails.js",
+    "send": "node scripts/send-celebration-emails.js"
+  },
+  "dependencies": {
+    "resend": "^4.0.0"
+  }
+}

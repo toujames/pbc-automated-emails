@@ -1,0 +1,43 @@
+name: Celebration Emails
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Log matching emails without sending"
+        required: true
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+  schedule:
+    - cron: "0 14 * * *"
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    env:
+      PC_CLIENTID: ${{ secrets.PC_CLIENTID }}
+      PC_SECRET: ${{ secrets.PC_SECRET }}
+      RESEND_API: ${{ secrets.RESEND_API }}
+      EMAIL_FROM: "PBC <info@pbctulsa.org>"
+      EMAIL_REPLY_TO: ${{ vars.EMAIL_REPLY_TO }}
+      TEST_EMAIL: ${{ github.event_name == 'workflow_dispatch' && 'james@touthang.info' || '' }}
+      TIME_ZONE: America/Chicago
+      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Send celebration emails
+        run: npm run send
